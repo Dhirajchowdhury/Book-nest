@@ -12,11 +12,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "BookNest — Personal Reading Tracker",
-  description: "BookNest is a personal space to organize and track your reading.",
+  title: "BookNest",
+  description: "BookNest is a place where u will be allowed to manage your books and update/record their statuses.",
 };
 
-export default function RootLayout({ children }) {
+function RootLayout({ children }) {
   return (
     <html
       lang="en"
@@ -26,3 +26,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+export default RootLayout;

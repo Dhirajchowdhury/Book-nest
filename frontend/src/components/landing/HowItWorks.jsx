@@ -4,7 +4,7 @@
  * Gives visitors a clear picture of how the application flows from creating 
  * an account to tracking reading progress.
  */
-export default function HowItWorks() {
+function HowItWorks() {
   // Simple data array for the 6 steps of the user journey
   const steps = [
     {
@@ -102,3 +102,4 @@ export default function HowItWorks() {
     </section>
   );
 }
+export default HowItWorks;

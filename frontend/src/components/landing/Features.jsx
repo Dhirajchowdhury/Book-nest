@@ -1,9 +1,5 @@
-/**
- * Features Component
- * Purpose: Presents the 9 core capabilities of BookNest.
- * Displays only requested features cleanly without bloat.
- */
-export default function Features() {
+
+function Features() {
   // Array of exact 9 requested features
   const coreFeatures = [
     {
@@ -99,3 +95,4 @@ export default function Features() {
     </section>
   );
 }
+export default Features;

@@ -1,12 +1,6 @@
 import Link from "next/link";
 
-/**
- * Hero Component
- * Purpose: Introduces BookNest to visitors with a warm welcome statement,
- * a clear call-to-action button, a visual reading card preview, and a 
- * "What You Can Expect" section.
- */
-export default function Hero() {
+function Hero() {
   return (
     <section className="bg-white py-12 sm:py-16 lg:py-20 border-b border-zinc-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -154,3 +148,4 @@ export default function Hero() {
     </section>
   );
 }
+export default Hero;

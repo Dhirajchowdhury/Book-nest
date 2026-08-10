@@ -1,11 +1,6 @@
 import Link from "next/link";
 
-/**
- * Footer Component
- * Purpose: Bottom footer displaying BookNest branding, short description, 
- * navigation links, basic contact placeholders, and copyright notice.
- */
-export default function Footer() {
+function Footer() {
   return (
     <footer className="bg-zinc-900 text-zinc-300 py-12 sm:py-16 border-t border-zinc-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,3 +75,4 @@ export default function Footer() {
     </footer>
   );
 }
+export default Footer;

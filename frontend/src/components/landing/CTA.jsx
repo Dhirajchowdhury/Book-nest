@@ -1,10 +1,6 @@
 import Link from "next/link";
 
-/**
- * CTA Component
- * Purpose: Final Call-To-Action banner encouraging visitors to join BookNest.
- */
-export default function CTA() {
+function CTA() {
   return (
     <section className="bg-emerald-900 text-white py-16 sm:py-20 relative overflow-hidden">
       {/* Decorative Warm Accent Background Shapes */}
@@ -40,3 +36,4 @@ export default function CTA() {
     </section>
   );
 }
+export default CTA;
