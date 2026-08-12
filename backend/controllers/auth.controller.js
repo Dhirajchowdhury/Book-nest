@@ -4,9 +4,9 @@ import { generateToken } from '../utils/jwt.js';
 
 
 const getCookieOptions = () => ({
-  httpOnly: true, 
+  httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax', 
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   maxAge: 86400000,
 });
 
@@ -99,7 +99,7 @@ export async function logout(req, res, next) {
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     });
 
     return res.status(200).json({
