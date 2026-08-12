@@ -1,98 +1,141 @@
+import Image from "next/image";
 
 function Features() {
-  // Array of exact 9 requested features
-  const coreFeatures = [
-    {
-      title: "Add Books",
-      description: "Quickly insert new books to your personal nest with title, author, and details.",
-      icon: "➕",
-    },
-    {
-      title: "View Books",
-      description: "Browse your complete book collection in a clean, visual card layout.",
-      icon: "📖",
-    },
-    {
-      title: "Edit Books",
-      description: "Update book details, authors, or genres whenever you need to make changes.",
-      icon: "✏️",
-    },
-    {
-      title: "Delete Books",
-      description: "Remove books from your collection to keep your library clean and accurate.",
-      icon: "🗑️",
-    },
-    {
-      title: "Search Books",
-      description: "Find any book instantly by searching for titles or author names.",
-      icon: "🔍",
-    },
-    {
-      title: "Filter Books",
-      description: "Sort and view books by reading status like Currently Reading, Finished, or Want to Read.",
-      icon: "🧹",
-    },
-    {
-      title: "Track Reading Status",
-      description: "Keep accurate tabs on what you've completed and what you plan to read next.",
-      icon: "📌",
-    },
-    {
-      title: "Add Ratings",
-      description: "Give star ratings to your books so you always remember your favorites.",
-      icon: "⭐",
-    },
-    {
-      title: "Add Personal Notes",
-      description: "Jot down meaningful quotes, takeaways, or personal thoughts for each book.",
-      icon: "📝",
-    },
-  ];
-
   return (
-    <section className="bg-white py-16 sm:py-20 border-b border-zinc-100">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-block px-3 py-1 bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-3">
-            Core Capabilities
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">
-            Everything You Need To Track Books
-          </h2>
-          <p className="text-zinc-600 mt-2 text-base">
-            No bloated features. Just simple, essential tools for avid readers.
-          </p>
-        </div>
+    <section className="bg-white py-16 border-b border-zinc-100">
+      <div className="max-w-5xl mx-auto px-8">
 
-        {/* 9 Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {coreFeatures.map((feature) => (
-            <div
-              key={feature.title}
-              className="p-6 rounded-2xl bg-white border border-zinc-200 hover:border-emerald-400 hover:shadow-sm transition-all flex items-start gap-4"
-            >
-              {/* Icon Container with Yellow Touch */}
-              <div className="w-12 h-12 rounded-xl bg-amber-100 border border-amber-200 flex-shrink-0 flex items-center justify-center text-xl shadow-2xs">
-                {feature.icon}
-              </div>
+        {/* Section Heading */}
+        <h2 className="text-4xl font-bold text-emerald-700 mb-6">
+          What You Can Expect
+        </h2>
 
-              {/* Title & Text */}
-              <div className="space-y-1">
-                <h3 className="text-base font-bold text-zinc-900">
-                  {feature.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
+        {/* Introduction */}
+        <p className="text-lg text-zinc-700 leading-relaxed mb-8">
+          BookNest is designed to give readers a simple place to manage their
+          books and keep track of their reading journey. Instead of keeping
+          everything scattered, you can organise your books and their details
+          in one personal space.
+        </p>
+
+        {/* Main Features */}
+        <div className="space-y-6">
+
+          {/* Add Books */}
+          <div className="flex items-start gap-4">
+            <Image
+              src="/add-book.png"
+              alt="Add books"
+              width={32}
+              height={32}
+            />
+
+            <div>
+              <h3 className="text-lg font-semibold text-zinc-900">
+                Add Books
+              </h3>
+
+              <p className="text-zinc-700">
+                Add books to your personal library with their basic details.
+              </p>
             </div>
-          ))}
+          </div>
+
+          {/* Organise Books */}
+          <div className="flex items-start gap-4">
+            <Image
+              src="/organise-book.png"
+              alt="Organise books"
+              width={32}
+              height={32}
+            />
+
+            <div>
+              <h3 className="text-lg font-semibold text-zinc-900">
+                Organise Books
+              </h3>
+
+              <p className="text-zinc-700">
+                Keep your books organised according to their reading status.
+              </p>
+            </div>
+          </div>
+
+          {/* Track Reading Status */}
+          <div className="flex items-start gap-4">
+            <Image
+              src="/track-book.png"
+              alt="Track reading status"
+              width={32}
+              height={32}
+            />
+
+            <div>
+              <h3 className="text-lg font-semibold text-zinc-900">
+                Track Reading Status
+              </h3>
+
+              <p className="text-zinc-700">
+                Keep track of books you are currently reading, have completed,
+                or want to read.
+              </p>
+            </div>
+          </div>
+
+          {/* Search and Filter */}
+          <div className="flex items-start gap-4">
+            <Image
+              src="/search-book.png"
+              alt="Search books"
+              width={32}
+              height={32}
+            />
+
+            <div>
+              <h3 className="text-lg font-semibold text-zinc-900">
+                Search and Filter
+              </h3>
+
+              <p className="text-zinc-700">
+                Find books easily using search and filtering options.
+              </p>
+            </div>
+          </div>
+
+          {/* Ratings and Personal Notes */}
+          <div className="flex items-start gap-4">
+            <Image
+              src="/book-notes.png"
+              alt="Book ratings and notes"
+              width={32}
+              height={32}
+            />
+
+            <div>
+              <h3 className="text-lg font-semibold text-zinc-900">
+                Ratings and Personal Notes
+              </h3>
+
+              <p className="text-zinc-700">
+                Add your own ratings and personal thoughts to remember your
+                experience with each book.
+              </p>
+            </div>
+          </div>
+
         </div>
+
+        {/* Closing Paragraph */}
+        <p className="text-lg text-zinc-700 leading-relaxed mt-10">
+          All these features are focused on one simple idea: making your
+          reading collection easier to manage without making the experience
+          complicated. BookNest is your personal digital shelf for your
+          reading journey.
+        </p>
 
       </div>
     </section>
   );
 }
+
 export default Features;

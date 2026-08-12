@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.routes.js';
+import bookRoutes from './routes/book.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -30,8 +31,9 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'BookNest Auth Backend is running' });
 });
 
-// 4. Mount Authentication Routes
+// 4. Mount Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/books', bookRoutes);
 
 // 5. 404 Route Handler
 app.use((req, res) => {
