@@ -2,11 +2,11 @@ import Navbar from '@/components/landing/Navbar';
 import SignupForm from '@/components/auth/SignupForm';
 
 export const metadata = {
-  title: 'Sign Up - BookNest',
-  description: 'Create your BookNest account to start tracking your personal reading journey.',
+  title: "BookNest",
+  description: "BookNest is a place where u will be allowed to manage your books and update/record their statuses.",
 };
 
-export default function SignupPage() {
+function SignupPage() {
   return (
     <div className="min-h-screen flex flex-col bg-zinc-50 font-sans">
       <Navbar />
@@ -16,3 +16,5 @@ export default function SignupPage() {
     </div>
   );
 }
+
+export default SignupPage;

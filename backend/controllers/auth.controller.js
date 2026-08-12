@@ -2,20 +2,14 @@ import { findUserByEmail, createUser, findUserById } from '../models/user.model.
 import { hashPassword, comparePassword } from '../utils/password.js';
 import { generateToken } from '../utils/jwt.js';
 
-/**
- * Cookie options helper for consistency across login and logout.
- */
+
 const getCookieOptions = () => ({
-  httpOnly: true, // Prevents client-side JavaScript access (protects against XSS)
-  secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
-  sameSite: 'lax', // CSRF protection setting
-  maxAge: 24 * 60 * 60 * 1000, // Cookie expiration time (1 day in milliseconds)
+  httpOnly: true, 
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax', 
+  maxAge: 86400000, // as 1 day = 86400000 milliseconds
 });
 
-/**
- * Controller: User Signup
- * POST /api/auth/signup
- */
 export async function signup(req, res) {
   try {
     const { email, password } = req.body;
@@ -24,7 +18,7 @@ export async function signup(req, res) {
     if (!email || !password) {
       return res.status(400).json({
         error: 'Validation Error',
-        message: 'Email and password are required.',
+        message: 'Email and password are must.',
       });
     }
 
@@ -40,7 +34,7 @@ export async function signup(req, res) {
     if (existingUser) {
       return res.status(400).json({
         error: 'Conflict',
-        message: 'An account with this email address already exists.',
+        message: 'This email address already exists.',
       });
     }
 
@@ -63,20 +57,16 @@ export async function signup(req, res) {
     console.error('Signup error:', error.message);
     return res.status(500).json({
       error: 'Server Error',
-      message: 'Something went wrong during signup. Please try again later.',
+      message: 'Signup failed. Please try again later.',
     });
   }
 }
 
-/**
- * Controller: User Login
- * POST /api/auth/login
- */
 export async function login(req, res) {
   try {
     const { email, password } = req.body;
 
-    // 1. Input Validation
+    // 6. Input Validation
     if (!email || !password) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -84,17 +74,16 @@ export async function login(req, res) {
       });
     }
 
-    // 2. Find user by email
+    // 7. Find user by email
     const user = await findUserByEmail(email);
     if (!user) {
-      // Use generic error message to avoid exposing whether email exists
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'Invalid email or password.',
       });
     }
 
-    // 3. Compare password with stored hash
+    // 8. Compare password with stored hash
     const isPasswordValid = await comparePassword(password, user.password_hash);
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -103,13 +92,13 @@ export async function login(req, res) {
       });
     }
 
-    // 4. Generate JWT
+    // 9. Generate JWT
     const token = generateToken(user.id);
 
-    // 5. Set JWT as HttpOnly Cookie
+    // 10. Set JWT as HttpOnly Cookie
     res.cookie('token', token, getCookieOptions());
 
-    // 6. Return success response
+    // 11. Return success response
     return res.status(200).json({
       message: 'Login successful!',
       user: {
@@ -126,13 +115,9 @@ export async function login(req, res) {
   }
 }
 
-/**
- * Controller: User Logout
- * POST /api/auth/logout
- */
 export async function logout(req, res) {
   try {
-    // Clear the authentication cookie
+
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -151,14 +136,10 @@ export async function logout(req, res) {
   }
 }
 
-/**
- * Controller: Get Current Authenticated User
- * GET /api/auth/me
- * Protected by requireAuth middleware
- */
+
 export async function getMe(req, res) {
   try {
-    // req.user.id is populated by requireAuth middleware
+
     const user = await findUserById(req.user.id);
 
     if (!user) {

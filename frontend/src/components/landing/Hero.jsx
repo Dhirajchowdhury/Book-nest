@@ -6,12 +6,11 @@ function Hero() {
     <section className="bg-white py-16">
       <div className="max-w-6xl mx-auto px-8">
         
-        <div className="grid grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-2 gap-12 items-start">
           
-          {/* Left side - Introduction and Signup */}
           <div>
-            <h1 className="text-5xl font-bold text-emerald-700 mb-6">
-              Welcome, pleasure to have you here!
+            <h1 className="text-5xl font-bold text-emerald-900 mb-6">
+              Welcome, <span className="text-5xl font-bold text-emerald-500 mb-6">pleasure to have you here!</span> 
             </h1>
 
             <p className="text-lg text-zinc-700 leading-relaxed mb-6">
@@ -29,19 +28,19 @@ function Hero() {
 
             <Link
               href="/signup"
-              className="inline-block bg-emerald-600 text-white px-8 py-3 rounded-lg font-semibold"
+              className=" mt-18 block w-fit mx-auto bg-emerald-600 text-white text-2xl px-9 py-5 rounded-xl font-bold text-center"
             >
               Fatak se Sign Up
             </Link>
           </div>
 
-          {/* Right side - Hero Image */}
           <div className="flex justify-center">
             <Image
-              src="/hero-image.png"
+              src="/landerimg.png"
               alt="Person reading a book"
               width={500}
               height={500}
+              className="border-2 border-black rounded-2xl"
             />
           </div>
 

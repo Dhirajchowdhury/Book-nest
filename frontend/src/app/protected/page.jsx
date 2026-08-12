@@ -7,33 +7,17 @@ import BookList from '@/components/books/BookList';
 import BookForm from '@/components/books/BookForm';
 import BookDetails from '@/components/books/BookDetails';
 
-/**
- * Main Authenticated BookNest Dashboard Page (/protected)
- * 
- * Handles:
- * 1. Auth check via GET /api/auth/me (with HttpOnly cookie)
- * 2. Fetching user's books via GET /api/books?search=...&status=...
- * 3. Add, Edit, View, and Delete book operations
- * 4. User logout via POST /api/auth/logout
- */
 export default function ProtectedDashboardPage() {
   const router = useRouter();
 
-  // Authentication State
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-
-  // Books Data State
   const [books, setBooks] = useState([]);
   const [booksLoading, setBooksLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
-  // Search & Filter State
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
-
-  // Modal / Form UI State
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingBook, setEditingBook] = useState(null);
   const [viewingBook, setViewingBook] = useState(null);

@@ -48,6 +48,6 @@ app.use((err, req, res, next) => {
 
 // 7. Start Express Server
 app.listen(PORT, () => {
-  console.log(`🚀 BookNest Backend running on http://localhost:${PORT}`);
-  console.log(`🔒 Configured CORS origin: ${FRONTEND_URL}`);
+  console.log(`BookNest Backend running on http://localhost:${PORT}`);
+  console.log(`Configured CORS origin: ${FRONTEND_URL}`);
 });

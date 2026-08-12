@@ -12,8 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "BookNest",
-  description: "BookNest is a place where u will be allowed to manage your books and update/record their statuses.",
+
 };
 
 function RootLayout({ children }) {

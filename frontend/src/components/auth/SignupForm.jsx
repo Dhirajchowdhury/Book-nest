@@ -4,22 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-/**
- * SignupForm Component
- * 
- * Provides email + password registration for new users.
- * Performs basic input validation, calls the Express backend API,
- * and handles loading and error states cleanly.
- */
-export default function SignupForm() {
+function SignupForm() {
   const router = useRouter();
 
-  // Form State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  // UI State
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -29,7 +19,7 @@ export default function SignupForm() {
     setError('');
     setSuccess('');
 
-    // Client-side Validation
+    
     if (!email || !password || !confirmPassword) {
       setError('Please fill in all fields.');
       return;
@@ -41,7 +31,7 @@ export default function SignupForm() {
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Confirmpassword must be equal to the password.');
       return;
     }
 
@@ -54,7 +44,7 @@ export default function SignupForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include credentials for cookies
+        credentials: 'include', // for cookies
         body: JSON.stringify({ email, password }),
       });
 
@@ -64,14 +54,12 @@ export default function SignupForm() {
         throw new Error(data.message || 'Signup failed. Please try again.');
       }
 
-      setSuccess('Account created successfully! Redirecting to login...');
+      setSuccess('Signup done ! Now do login...');
       
-      // Clear form
       setEmail('');
       setPassword('');
       setConfirmPassword('');
 
-      // Redirect to login after brief delay
       setTimeout(() => {
         router.push('/login');
       }, 1500);
@@ -85,28 +73,23 @@ export default function SignupForm() {
   return (
     <div className="w-full max-w-md bg-white border border-emerald-100 p-8 rounded-2xl shadow-sm">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-extrabold text-emerald-950">Join BookNest</h2>
-        <p className="text-sm text-zinc-500 mt-1">Create your personal reading journal</p>
+        <h2 className="text-2xl font-extrabold text-emerald-950">Enter into BookNest</h2>
+        
       </div>
 
-      {/* Error Alert */}
       {error && (
         <div className="mb-4 p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-xl flex items-center gap-2">
-          <span>⚠️</span>
           <span>{error}</span>
         </div>
       )}
 
-      {/* Success Alert */}
       {success && (
         <div className="mb-4 p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-xl flex items-center gap-2">
-          <span>✅</span>
           <span>{success}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Email Field */}
         <div>
           <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5">
             Email Address
@@ -116,12 +99,11 @@ export default function SignupForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            placeholder="random@gmail.com"
             className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
           />
         </div>
 
-        {/* Password Field */}
         <div>
           <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5">
             Password
@@ -131,12 +113,11 @@ export default function SignupForm() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
+            placeholder="******"
             className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
           />
         </div>
 
-        {/* Confirm Password Field */}
         <div>
           <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1.5">
             Confirm Password
@@ -151,7 +132,6 @@ export default function SignupForm() {
           />
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
@@ -161,13 +141,14 @@ export default function SignupForm() {
         </button>
       </form>
 
-      {/* Footer Link */}
       <p className="mt-6 text-center text-xs text-zinc-500">
-        Already have an account?{' '}
+        Already a user ?{' '}
         <Link href="/login" className="font-bold text-emerald-600 hover:underline">
-          Log in here
+          Then Log in jere
         </Link>
       </p>
     </div>
   );
 }
+
+export default SignupForm;
