@@ -2,11 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-/**
- * BookForm Component
- * 
- * Reusable modal form for creating a new book or editing an existing book.
- */
 export default function BookForm({ initialData, onSave, onCancel, submitting }) {
   const [formData, setFormData] = useState({
     title: '',
@@ -117,7 +112,7 @@ export default function BookForm({ initialData, onSave, onCancel, submitting }) 
               name="title"
               value={formData.title}
               onChange={handleChange}
-              placeholder="e.g. The Great Gatsby"
+              placeholder="e.g. Do It Today"
               className="w-full px-3.5 py-2 bg-zinc-50 border border-zinc-200 rounded-xl font-medium text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white"
               required
             />
@@ -133,7 +128,7 @@ export default function BookForm({ initialData, onSave, onCancel, submitting }) 
               name="author"
               value={formData.author}
               onChange={handleChange}
-              placeholder="e.g. F. Scott Fitzgerald"
+              placeholder="e.g. Darius Foroux."
               className="w-full px-3.5 py-2 bg-zinc-50 border border-zinc-200 rounded-xl font-medium text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white"
               required
             />

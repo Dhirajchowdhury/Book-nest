@@ -7,14 +7,13 @@ const getCookieOptions = () => ({
   httpOnly: true, 
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'lax', 
-  maxAge: 86400000, // as 1 day = 86400000 milliseconds
+  maxAge: 86400000,
 });
 
-export async function signup(req, res) {
+export async function signup(req, res, next) {
   try {
     const { email, password } = req.body;
 
-    // 1. Input Validation
     if (!email || !password) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -29,7 +28,6 @@ export async function signup(req, res) {
       });
     }
 
-    // 2. Check if user already exists
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({
@@ -38,13 +36,9 @@ export async function signup(req, res) {
       });
     }
 
-    // 3. Hash the plain text password
     const hashedPassword = await hashPassword(password);
-
-    // 4. Store user in database
     const newUser = await createUser(email, hashedPassword);
 
-    // 5. Return success response
     return res.status(201).json({
       message: 'Account created successfully! You can now log in.',
       user: {
@@ -54,19 +48,14 @@ export async function signup(req, res) {
       },
     });
   } catch (error) {
-    console.error('Signup error:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Signup failed. Please try again later.',
-    });
+    next(error);
   }
 }
 
-export async function login(req, res) {
+export async function login(req, res, next) {
   try {
     const { email, password } = req.body;
 
-    // 6. Input Validation
     if (!email || !password) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -74,7 +63,6 @@ export async function login(req, res) {
       });
     }
 
-    // 7. Find user by email
     const user = await findUserByEmail(email);
     if (!user) {
       return res.status(401).json({
@@ -83,7 +71,6 @@ export async function login(req, res) {
       });
     }
 
-    // 8. Compare password with stored hash
     const isPasswordValid = await comparePassword(password, user.password_hash);
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -92,13 +79,9 @@ export async function login(req, res) {
       });
     }
 
-    // 9. Generate JWT
     const token = generateToken(user.id);
-
-    // 10. Set JWT as HttpOnly Cookie
     res.cookie('token', token, getCookieOptions());
 
-    // 11. Return success response
     return res.status(200).json({
       message: 'Login successful!',
       user: {
@@ -107,17 +90,12 @@ export async function login(req, res) {
       },
     });
   } catch (error) {
-    console.error('Login error:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Something went wrong during login. Please try again later.',
-    });
+    next(error);
   }
 }
 
-export async function logout(req, res) {
+export async function logout(req, res, next) {
   try {
-
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -128,18 +106,12 @@ export async function logout(req, res) {
       message: 'Logged out successfully.',
     });
   } catch (error) {
-    console.error('Logout error:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Something went wrong during logout.',
-    });
+    next(error);
   }
 }
 
-
-export async function getMe(req, res) {
+export async function getMe(req, res, next) {
   try {
-
     const user = await findUserById(req.user.id);
 
     if (!user) {
@@ -153,10 +125,6 @@ export async function getMe(req, res) {
       user,
     });
   } catch (error) {
-    console.error('getMe error:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Failed to retrieve user profile.',
-    });
+    next(error);
   }
 }

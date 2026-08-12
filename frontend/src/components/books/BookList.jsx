@@ -1,11 +1,5 @@
 'use client';
 
-/**
- * BookList Component
- * 
- * Renders the search bar, reading status filter dropdown, book records table,
- * and empty state.
- */
 export default function BookList({
   books,
   search,

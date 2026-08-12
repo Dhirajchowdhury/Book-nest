@@ -144,7 +144,7 @@ function SignupForm() {
       <p className="mt-6 text-center text-xs text-zinc-500">
         Already a user ?{' '}
         <Link href="/login" className="font-bold text-emerald-600 hover:underline">
-          Then Log in jere
+          Then Login here
         </Link>
       </p>
     </div>

@@ -1,25 +1,19 @@
 'use client';
+import Image from "next/image";
 
-/**
- * BookHeader Component
- * 
- * Displays the main app title/logo, current logged-in user email,
- * "Add Book" button, and "Logout" button.
- */
 export default function BookHeader({ userEmail, onOpenAddModal, onLogout }) {
   return (
     <header className="bg-white border-b border-zinc-200 sticky top-0 z-10 shadow-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Logo / Brand Name */}
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white text-xl font-bold">
             📚
           </div>
           <div>
-            <h1 className="text-xl font-extrabold text-emerald-950 tracking-tight">
-              Book<span className="text-emerald-600">Nest</span>
+            <h1 className="text-xl font-extrabold text-emerald-900 tracking-tight">
+              Book<span className="text-emerald-500">Nest</span>
             </h1>
-            <p className="text-xs text-zinc-500 font-medium">Personal Book Tracker</p>
+            <p className="text-xs text-zinc-500 font-medium">Books details recorder</p>
           </div>
         </div>
 

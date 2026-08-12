@@ -1,21 +1,10 @@
-import {
-  createBook,
-  findBooksByUserId,
-  findBookByIdAndUserId,
-  updateBook,
-  deleteBook,
-} from '../models/book.model.js';
+import {createBook,findBooksByUserId,findBookByIdAndUserId,updateBook,deleteBook} from '../models/book.model.js';
 
-/**
- * Controller: Create a new book
- * POST /api/books
- */
-export async function createBookHandler(req, res) {
+export async function createBookHandler(req, res, next) {
   try {
     const { title, author, cover_image_url, status, rating, personal_notes } = req.body;
-    const userId = req.user.id; // Populated by requireAuth middleware
+    const userId = req.user.id;
 
-    // 1. Input Validation
     if (!title || !title.trim() || !author || !author.trim()) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -32,7 +21,6 @@ export async function createBookHandler(req, res) {
       });
     }
 
-    // 2. Rating Validation & Conditioning
     let bookRating = null;
     if (bookStatus === 'Finished') {
       if (rating !== undefined && rating !== null && rating !== '') {
@@ -47,7 +35,6 @@ export async function createBookHandler(req, res) {
       }
     }
 
-    // 3. Create book record
     const newBook = await createBook({
       user_id: userId,
       title: title.trim(),
@@ -63,19 +50,11 @@ export async function createBookHandler(req, res) {
       book: newBook,
     });
   } catch (error) {
-    console.error('Error creating book:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Failed to create book. Please try again.',
-    });
+    next(error);
   }
 }
 
-/**
- * Controller: Get all books belonging to authenticated user (with optional search and status filter)
- * GET /api/books
- */
-export async function getBooksHandler(req, res) {
+export async function getBooksHandler(req, res, next) {
   try {
     const userId = req.user.id;
     const { search, status } = req.query;
@@ -84,19 +63,11 @@ export async function getBooksHandler(req, res) {
 
     return res.status(200).json({ books });
   } catch (error) {
-    console.error('Error fetching books:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Failed to retrieve books.',
-    });
+    next(error);
   }
 }
 
-/**
- * Controller: Get single book by ID
- * GET /api/books/:id
- */
-export async function getBookByIdHandler(req, res) {
+export async function getBookByIdHandler(req, res, next) {
   try {
     const bookId = req.params.id;
     const userId = req.user.id;
@@ -112,25 +83,16 @@ export async function getBookByIdHandler(req, res) {
 
     return res.status(200).json({ book });
   } catch (error) {
-    console.error('Error fetching book:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Failed to retrieve book details.',
-    });
+    next(error);
   }
 }
 
-/**
- * Controller: Update a book by ID
- * PUT /api/books/:id
- */
-export async function updateBookHandler(req, res) {
+export async function updateBookHandler(req, res, next) {
   try {
     const bookId = req.params.id;
     const userId = req.user.id;
     const { title, author, cover_image_url, status, rating, personal_notes } = req.body;
 
-    // 1. Check if book exists and belongs to user
     const existingBook = await findBookByIdAndUserId(bookId, userId);
     if (!existingBook) {
       return res.status(404).json({
@@ -139,7 +101,6 @@ export async function updateBookHandler(req, res) {
       });
     }
 
-    // 2. Input Validation
     if (!title || !title.trim() || !author || !author.trim()) {
       return res.status(400).json({
         error: 'Validation Error',
@@ -155,7 +116,6 @@ export async function updateBookHandler(req, res) {
       });
     }
 
-    // 3. Rating Validation & Conditioning
     const updatedStatus = status || existingBook.status;
     let updatedRating = null;
 
@@ -172,7 +132,6 @@ export async function updateBookHandler(req, res) {
       }
     }
 
-    // 4. Build update data payload
     const updateData = {
       title: title.trim(),
       author: author.trim(),
@@ -190,19 +149,11 @@ export async function updateBookHandler(req, res) {
       book: updatedBook,
     });
   } catch (error) {
-    console.error('Error updating book:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Failed to update book.',
-    });
+    next(error);
   }
 }
 
-/**
- * Controller: Delete a book by ID
- * DELETE /api/books/:id
- */
-export async function deleteBookHandler(req, res) {
+export async function deleteBookHandler(req, res, next) {
   try {
     const bookId = req.params.id;
     const userId = req.user.id;
@@ -220,10 +171,6 @@ export async function deleteBookHandler(req, res) {
       message: 'Book deleted successfully!',
     });
   } catch (error) {
-    console.error('Error deleting book:', error.message);
-    return res.status(500).json({
-      error: 'Server Error',
-      message: 'Failed to delete book.',
-    });
+    next(error);
   }
 }
