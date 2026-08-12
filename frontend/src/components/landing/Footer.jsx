@@ -29,7 +29,7 @@ function Footer() {
 
         </div>
         <div className="border-t border-emerald-800 mt-8 pt-5 text-sm text-emerald-300 flex justify-center text-center">
-          © 2026 BookNest. All rights reserved. Made with khoon paseena by Dhiraj 
+          © 2026 BookNest. All rights reserved. Made by Dhiraj 
         </div>
 
       </div>

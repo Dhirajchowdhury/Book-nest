@@ -30,7 +30,7 @@ function Hero() {
               href="/signup"
               className="mt-6 sm:mt-10 block w-full sm:w-fit mx-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg sm:text-xl md:text-2xl px-5 py-3 rounded-xl font-bold text-center transition-colors"
             >
-              Fatak se Sign Up
+              Do SignUp
             </Link>
           </div>
 
