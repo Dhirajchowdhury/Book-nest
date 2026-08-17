@@ -1,5 +1,7 @@
 'use client';
-import Image from "next/image";
+import Image from "next/image"
+import link from "next"
+import next from "next";
 
 export default function BookHeader({ userEmail, onOpenAddModal, onLogout }) {
   return (
@@ -28,7 +30,10 @@ export default function BookHeader({ userEmail, onOpenAddModal, onLogout }) {
           {userEmail && (
             <div className="text-xs text-zinc-600 bg-zinc-100 px-3 py-1.5 rounded-lg border border-zinc-200 flex items-center gap-1.5">
               <span className="text-emerald-600 font-bold">👤</span>
+
               <span className="font-semibold text-zinc-800 truncate max-w-180px sm:max-w-220px">
+
+                <link rel="stylesheet" href="/D:\Internships\Renoweb\Booknest\frontend\src\components\books\username.jsx" />
                 {userEmail}
               </span>
             </div>
