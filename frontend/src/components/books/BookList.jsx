@@ -108,7 +108,17 @@ export default function BookList({
                   <tr key={book.id} className="hover:bg-zinc-50/80 transition-colors">
                     {/* Title & Author */}
                     <td className="px-6 py-4">
-                      <div className="font-bold text-zinc-900">{book.title}</div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-zinc-900">{book.title}</span>
+                        {book.document && (
+                          <span
+                            className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold rounded-md border border-emerald-200"
+                            title={`PDF attached: ${book.document.file_name}`}
+                          >
+                            <span>📄</span> PDF
+                          </span>
+                        )}
+                      </div>
                       <div className="text-xs text-zinc-500 font-medium">by {book.author}</div>
                     </td>
 

@@ -1,7 +1,5 @@
 'use client';
-import Image from "next/image"
-import link from "next"
-import next from "next";
+import Image from "next/image";
 
 export default function BookHeader({ userEmail, onOpenAddModal, onLogout }) {
   return (
@@ -9,14 +7,14 @@ export default function BookHeader({ userEmail, onOpenAddModal, onLogout }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xl font-bold">
-              <Image
-                src="/icon.png"
-                alt="BookNest"
-                width={36}
-                height={36}
-                className="object-contain"
-              />
-            </div>
+            <Image
+              src="/icon.png"
+              alt="BookNest"
+              width={36}
+              height={36}
+              className="object-contain"
+            />
+          </div>
           <div>
             <h1 className="text-xl font-extrabold text-emerald-900 tracking-tight">
               Book<span className="text-emerald-500">Nest</span>
@@ -30,10 +28,7 @@ export default function BookHeader({ userEmail, onOpenAddModal, onLogout }) {
           {userEmail && (
             <div className="text-xs text-zinc-600 bg-zinc-100 px-3 py-1.5 rounded-lg border border-zinc-200 flex items-center gap-1.5">
               <span className="text-emerald-600 font-bold">👤</span>
-
               <span className="font-semibold text-zinc-800 truncate max-w-180px sm:max-w-220px">
-
-                <link rel="stylesheet" href="/D:\Internships\Renoweb\Booknest\frontend\src\components\books\username.jsx" />
                 {userEmail}
               </span>
             </div>

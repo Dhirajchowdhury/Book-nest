@@ -59,7 +59,11 @@ export async function getBooksHandler(req, res, next) {
     const userId = req.user.id;
     const { search, status } = req.query;
 
-    const books = await findBooksByUserId(userId, { search, status });
+    const rawBooks = await findBooksByUserId(userId, { search, status });
+    const books = rawBooks.map((b) => ({
+      ...b,
+      document: Array.isArray(b.book_documents) ? b.book_documents[0] || null : b.book_documents || null,
+    }));
 
     return res.status(200).json({ books });
   } catch (error) {
@@ -81,7 +85,12 @@ export async function getBookByIdHandler(req, res, next) {
       });
     }
 
-    return res.status(200).json({ book });
+    const formattedBook = {
+      ...book,
+      document: Array.isArray(book.book_documents) ? book.book_documents[0] || null : book.book_documents || null,
+    };
+
+    return res.status(200).json({ book: formattedBook });
   } catch (error) {
     next(error);
   }

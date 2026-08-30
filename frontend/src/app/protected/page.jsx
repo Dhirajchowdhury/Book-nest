@@ -56,9 +56,6 @@ export default function ProtectedDashboardPage() {
   const fetchBooks = useCallback(async () => {
     if (!user) return;
 
-    setBooksLoading(true);
-    setError('');
-
     try {
       const queryParams = new URLSearchParams();
       if (search.trim()) queryParams.append('search', search.trim());
@@ -82,17 +79,50 @@ export default function ProtectedDashboardPage() {
     } catch (err) {
       console.error('Error fetching books:', err.message);
       setError(err.message);
-    } finally {
-      setBooksLoading(false);
     }
   }, [backendUrl, user, search, statusFilter]);
 
   // Trigger book fetch whenever user, search, or statusFilter changes
   useEffect(() => {
-    if (user) {
-      fetchBooks();
-    }
-  }, [user, fetchBooks]);
+    if (!user) return;
+    let isMounted = true;
+
+    const loadBooks = async () => {
+      try {
+        const queryParams = new URLSearchParams();
+        if (search.trim()) queryParams.append('search', search.trim());
+        if (statusFilter && statusFilter !== 'All') queryParams.append('status', statusFilter);
+
+        const url = `${backendUrl}/api/books?${queryParams.toString()}`;
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.message || 'Failed to fetch books.');
+        }
+
+        const data = await response.json();
+        if (isMounted) {
+          setBooks(data.books || []);
+        }
+      } catch (err) {
+        console.error('Error fetching books:', err.message);
+        if (isMounted) setError(err.message);
+      } finally {
+        if (isMounted) setBooksLoading(false);
+      }
+    };
+
+    loadBooks();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user, search, statusFilter, backendUrl]);
 
   // Temporary Toast Helper
   const showSuccess = (msg) => {
@@ -115,8 +145,8 @@ export default function ProtectedDashboardPage() {
     }
   };
 
-  // 4. Handle Create or Update Book Save
-  const handleSaveBook = async (formData) => {
+  // 4. Handle Create or Update Book Save + PDF Upload
+  const handleSaveBook = async (formData, pdfFile) => {
     setFormSubmitting(true);
     setError('');
 
@@ -128,6 +158,7 @@ export default function ProtectedDashboardPage() {
 
       const method = isEdit ? 'PUT' : 'POST';
 
+      // 1. Save book metadata
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -139,6 +170,26 @@ export default function ProtectedDashboardPage() {
 
       if (!response.ok) {
         throw new Error(resData.message || 'Failed to save book.');
+      }
+
+      const savedBook = resData.book;
+
+      // 2. If a PDF file was selected, upload via FormData to /api/books/:bookId/document
+      if (pdfFile && savedBook?.id) {
+        const uploadFormData = new FormData();
+        uploadFormData.append('pdf', pdfFile);
+
+        const pdfResponse = await fetch(`${backendUrl}/api/books/${savedBook.id}/document`, {
+          method: 'POST',
+          credentials: 'include',
+          body: uploadFormData,
+        });
+
+        const pdfResData = await pdfResponse.json();
+
+        if (!pdfResponse.ok) {
+          throw new Error(pdfResData.message || 'Book metadata saved, but PDF upload failed.');
+        }
       }
 
       showSuccess(isEdit ? 'Book updated successfully!' : 'Book created successfully!');
@@ -153,7 +204,35 @@ export default function ProtectedDashboardPage() {
     }
   };
 
-  // 5. Handle Delete Book
+  // 5. Handle Delete PDF Document
+  const handleDeleteDocument = async (bookId) => {
+    const confirmed = window.confirm('Are you sure you want to delete the attached PDF document?');
+    if (!confirmed) return;
+
+    setError('');
+
+    try {
+      const response = await fetch(`${backendUrl}/api/books/${bookId}/document`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.message || 'Failed to delete PDF document.');
+      }
+
+      showSuccess('PDF document deleted successfully.');
+      setViewingBook(null);
+      fetchBooks();
+    } catch (err) {
+      console.error('Delete document error:', err.message);
+      setError(err.message);
+    }
+  };
+
+  // 6. Handle Delete Book
   const handleDeleteBook = async (bookId, bookTitle) => {
     const confirmed = window.confirm(`Are you sure you want to delete "${bookTitle}"?`);
     if (!confirmed) return;
@@ -232,7 +311,7 @@ export default function ProtectedDashboardPage() {
           <div>
             <h2 className="text-2xl font-extrabold text-zinc-900 tracking-tight">My Book Collection</h2>
             <p className="text-xs sm:text-sm text-zinc-500">
-              Manage your personal reading shelf, track progress, and record notes.
+              Manage your personal reading shelf, track progress, attach PDFs, and record notes.
             </p>
           </div>
         </div>
@@ -261,6 +340,7 @@ export default function ProtectedDashboardPage() {
       {/* Reusable Form Modal (Add / Edit) */}
       {isFormOpen && (
         <BookForm
+          key={editingBook?.id || 'new'}
           initialData={editingBook}
           onSave={handleSaveBook}
           onCancel={() => {
@@ -276,8 +356,10 @@ export default function ProtectedDashboardPage() {
         <BookDetails
           book={viewingBook}
           onClose={() => setViewingBook(null)}
+          onDeleteDocument={handleDeleteDocument}
         />
       )}
     </div>
   );
 }
+

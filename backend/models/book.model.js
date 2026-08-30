@@ -17,7 +17,7 @@ export async function createBook(bookData) {
 export async function findBooksByUserId(userId, { search, status } = {}) {
   let query = supabase
     .from('books')
-    .select('*')
+    .select('*, book_documents(*)')
     .eq('user_id', userId);
 
   if (status && status !== 'All') {
@@ -43,7 +43,7 @@ export async function findBooksByUserId(userId, { search, status } = {}) {
 export async function findBookByIdAndUserId(bookId, userId) {
   const { data, error } = await supabase
     .from('books')
-    .select('*')
+    .select('*, book_documents(*)')
     .eq('id', bookId)
     .eq('user_id', userId)
     .single();

@@ -22,7 +22,7 @@ function Hero() {
             </p>
 
             <p className="text-base sm:text-lg text-zinc-700 mb-6">
-              So, don't wait and start organising your books now by just
+              So, don&apos;t wait and start organising your books now by just
               hitting the button below !!
             </p>
 

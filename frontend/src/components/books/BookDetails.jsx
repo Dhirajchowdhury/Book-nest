@@ -1,11 +1,11 @@
 'use client';
 
-/**
- * BookDetails Component
- * 
- * Displays complete information for a selected book record in a clean modal view.
- */
-export default function BookDetails({ book, onClose }) {
+import { useState } from 'react';
+
+export default function BookDetails({ book, onClose, onDeleteDocument }) {
+  const [loadingPdfUrl, setLoadingPdfUrl] = useState(false);
+  const [pdfError, setPdfError] = useState('');
+
   if (!book) return null;
 
   const formatDate = (dateString) => {
@@ -15,6 +15,47 @@ export default function BookDetails({ book, onClose }) {
       timeStyle: 'short',
     });
   };
+
+  const formatBytes = (bytes) => {
+    if (!bytes) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const handleOpenPdf = async () => {
+    setLoadingPdfUrl(true);
+    setPdfError('');
+
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+      const response = await fetch(`${backendUrl}/api/books/${book.id}/document/url`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch PDF URL.');
+      }
+
+      if (data.signedUrl) {
+        window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+      } else {
+        throw new Error('No signed URL returned.');
+      }
+    } catch (err) {
+      console.error('Error fetching PDF URL:', err.message);
+      setPdfError(err.message);
+    } finally {
+      setLoadingPdfUrl(false);
+    }
+  };
+
+  const document = book.document;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
@@ -69,6 +110,63 @@ export default function BookDetails({ book, onClose }) {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Book PDF Section */}
+          <div className="bg-emerald-50/60 p-4 rounded-xl border border-emerald-100 space-y-2">
+            <span className="block text-xs font-bold text-emerald-950 uppercase tracking-wider">
+              Book PDF Document
+            </span>
+
+            {document ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2 bg-white p-3 rounded-lg border border-emerald-200">
+                  <div className="flex items-center gap-2.5 overflow-hidden">
+                    <span className="text-2xl shrink-0">📄</span>
+                    <div className="truncate">
+                      <span className="text-xs font-bold text-zinc-900 block truncate">
+                        {document.file_name}
+                      </span>
+                      <span className="text-[11px] font-semibold text-zinc-500">
+                        {formatBytes(document.file_size)} • {document.mime_type}
+                      </span>
+                    </div>
+                  </div>
+
+                  <span className="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold rounded-md uppercase tracking-wider border border-emerald-200 shrink-0">
+                    {document.processing_status || 'uploaded'}
+                  </span>
+                </div>
+
+                {pdfError && (
+                  <p className="text-xs font-semibold text-red-600 bg-red-50 p-2 rounded-lg border border-red-100">
+                    ⚠️ {pdfError}
+                  </p>
+                )}
+
+                <div className="flex items-center gap-2 justify-end">
+                  {onDeleteDocument && (
+                    <button
+                      onClick={() => onDeleteDocument(book.id)}
+                      className="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-lg border border-red-200 transition-colors cursor-pointer"
+                    >
+                      Delete PDF
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handleOpenPdf}
+                    disabled={loadingPdfUrl}
+                    className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  >
+                    <span>{loadingPdfUrl ? 'Generating Link...' : 'View / Download PDF'}</span>
+                    <span>↗</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-zinc-500 font-medium">No PDF document attached to this book.</p>
+            )}
           </div>
 
           {/* Personal Notes */}
